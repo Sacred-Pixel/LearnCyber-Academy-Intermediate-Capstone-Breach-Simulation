@@ -46,3 +46,7 @@ This simulation was conducted as part of the LearnCyber Academy curriculum. The 
 * Successfully reconstructed the attack chain for three distinct breach vectors.
 * Mapped technical failures to specific NIST CSF subcategories.
 * Developed a remediation roadmap focusing on both technical controls and policy updates.
+
+---
+
+License: Licensed under the MIT License - see the file for details.
