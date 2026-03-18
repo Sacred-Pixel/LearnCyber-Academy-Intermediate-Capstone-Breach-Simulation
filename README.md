@@ -6,6 +6,12 @@ This project simulates a comprehensive enterprise security incident response. It
 
 ---
 
+### 🏢 Project Context
+
+This simulation was conducted as part of the LearnCyber Academy curriculum. The scenario involves a mid-sized enterprise facing multiple concurrent security incidents. My role, in collaboration with my partner, was to act as the Incident Response and GRC team to secure the environment and report to the Board of Directors.
+
+---
+
 ### 👥 The Team
 * **[Partner Name A] - Technical Lead**
   * Focus: Malware analysis, IOC extraction, attack chain reconstruction, and SOC reporting.
