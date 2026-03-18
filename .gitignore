@@ -1,0 +1,26 @@
+# --- OS Metadata ---
+.DS_Store
+Thumbs.db
+.directory
+
+# --- Microsoft Office (Temporary Files) ---
+~$*.docx
+~$*.xlsx
+~$*.pptx
+*.tmp
+
+# --- Forensic & Capture Files (Large Data) ---
+*.pcap
+*.pcapng
+*.evtx
+*.mem
+*.raw
+*.img
+*.vmdk
+
+# --- Security Tools & Logs ---
+*.log
+*.bak
+*.old
+.env
+auth_keys.txt
