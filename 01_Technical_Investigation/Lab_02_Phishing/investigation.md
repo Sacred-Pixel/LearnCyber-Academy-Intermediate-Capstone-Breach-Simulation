@@ -1,7 +1,6 @@
 # 🛡️ SOC Technical Investigation: Phishing Analysis 2
 **Lead Investigator:** Harvey R
 **Academy:** LearnCyber Academy - Intermediate Capstone  
-**Status:** Final  
 
 ---
 
