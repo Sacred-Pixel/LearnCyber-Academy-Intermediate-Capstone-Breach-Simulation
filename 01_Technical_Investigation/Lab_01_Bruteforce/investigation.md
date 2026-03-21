@@ -1,75 +1,68 @@
 # 🛡️ SOC Technical Investigation: Bruteforce
-**Lead Investigator:** [Your Name]  
+**Lead Investigator:** Harvey R
 **Academy:** LearnCyber Academy - Intermediate Capstone  
 
 ---
 
 ## 1. Executive Attack Summary
-> [Provide a 3-5 sentence "TL;DR" of the incident. Describe the threat actor's behavior, the primary exploit used, and the ultimate outcome. Example: "The organization was targeted via a Follina RCE vulnerability which led to unauthorized shell access and credential harvesting."]
-
+The organization's Windows environment was targeted by a high-intensity RDP (Remote Desktop Protocol) bruteforce attack originating from the external IP address 113.161.192.227. Over 3,100 Audit Failure events (Event ID 4625) were recorded as the threat actor attempted to compromise the local 'administrator' account. The attack utilized a wide range of source ports, suggesting an automated tool was used to cycle through login attempts.
 ---
 
 ## 2. Incident Timeline (UTC)
 | Timestamp | Event Description | Source Log / Evidence |
 | :--- | :--- | :--- |
-| **HH:MM** | **Initial Access:** User opens malicious file. | `Sysmon Event ID 1` |
-| **HH:MM** | **Exploitation:** Connection to C2 IP [X.X.X.X]. | `Packet Capture / HTTP GET` |
-| **HH:MM** | **Persistence:** Registry key or Scheduled Task created. | `Autoruns / Registry Hive` |
-| **HH:MM** | **Exfiltration:** Sensitive data sent to external server. | `Network Flow Logs` |
+| **07:22:00 AM** | Latest Recorded Failure: The last captured attempt in the log. | `Event ID 4625` |
+| **Various** | High-Intensity Spraying: Thousands of attempts in rapid succession. | `Security Log` |
+| **Ongoing** | Credential Access Attempt: Continuous NTLM authentication failures. | `NTLM / NtLmSsp`|
 
 ---
 
 ## 3. The Attack Chain Breakdown
-*This section identifies the "Three Pillars" of the breach.*
 
 ### 🟢 Entry Point
-* **Identification:** [Describe how the attacker gained the first foothold.]
-* **Technical Detail:** [e.g., "Exploited CVE-2022-30190 via remote template injection in 'Invoice.docx'."]
+* **Identification:** External-facing RDP (Remote Desktop Protocol) session request.
+* **Technical Detail:** The attacker targeted the built-in local 'administrator' account using a Network Logon (Type 3).
 * **Visual Evidence:** ![Entry Point Screenshot](./screenshots/entry_point.png)
 
 ### 🟡 Lateral Movement
-* **Identification:** [Did the attacker move to other systems or escalate privileges?]
-* **Technical Detail:** [e.g., "Attacker utilized 'psexec' to move from Workstation-01 to the Domain Controller."]
+* **Identification:** Potential account takeover.
+* **Technical Detail:** The repeated use of NtLmSsp indicates an attempt to crack the local administrator password to gain an initial foothold. If successful, this would lead to administrative access over the network.
 * **Visual Evidence:** ![Lateral Movement Screenshot](./screenshots/lateral.png)
 
 ### 🔴 Data Exfiltration
-* **Identification:** [What was stolen and how was it moved out?]
-* **Technical Detail:** [e.g., "A .zip archive of the HR database was uploaded via POST request to a GitHub Gist."]
+* **Identification:** Post-compromise objective
+* **Technical Detail:** While the logs provided focus on the authentication failures, the ultimate goal of such an attack is typically data theft or ransomware deployment following a successful administrative login.
 * **Visual Evidence:** ![Exfiltration Screenshot](./screenshots/exfil.png)
 
 ---
 
 ## 4. Extracted Indicators of Compromise (IOCs)
-*Technical artifacts for the GRC Lead to use in the Risk Assessment.*
 
 | Type | Value | Description / Context |
 | :--- | :--- | :--- |
-| **IP Address** | `0.0.0.0` | Command & Control (C2) Server |
-| **Domain** | `malicious-site.com` | Hosting site for second-stage payload |
-| **File Hash** | `SHA256: [Hash]` | Hash of the primary malware sample |
-| **Registry Key**| `HKCU\...\Run` | Used for persistence |
+| **IP Address** | `113.161.192.227` | Command & Control / Attacker Source |
+| **Account Name** | `administrator` | Targeted local administrative account |
+| **Event ID** | `4625` | Windows Audit Failure (Logon) |
+| **Logon Type**| `3` | Network Logon attempt |
 
 ---
 
 ## 5. Attack Techniques (MITRE ATT&CK Mapping)
-*Mapping technical findings to the industry-standard framework.*
 
-* **TA0001 - Initial Access:** [T1566.001 - Spearphishing Attachment]
-* **TA0002 - Execution:** [T1059.001 - PowerShell]
-* **TA0010 - Exfiltration:** [T1041 - Exfiltration Over C2 Channel]
+* **TA0006 - Credential Access:** [T1110.001 - Brute Force: Password Guessing]
+* **TA0001 - Initial Access:** [T1133 - External Remote Services]
 
 ---
 
 ## 6. Tools Utilized
-*List the forensic toolkit used to solve this lab:*
-* **Analysis:** CyberChef, Strings, Exiftool
-* **Network:** Wireshark, Network Miner
-* **Endpoint:** Event Viewer, Procmon, Volatility
+
+* **Analysis:** Microsoft Excel (CSV analysis), Notepad++
+* **Network:** Wireshark, IP Geolocation
+* **Endpoint:** Windows Event Viewer (EVTX analysis)
 
 ---
 
 ## 7. Lab Completion Evidence
-> [Insert your final "Challenge Complete" or "Flag" screenshot here to prove the lab is finished.]
 
 ![Lab Completion](./screenshots/lab_finish.png)
 
