@@ -25,7 +25,8 @@ This simulation was conducted as part of the LearnCyber Academy curriculum. The 
 | :--- | :--- | 
 | **Bruteforce** | Identity / Credential Theft | 
 | **Phishing 2** | Phishing Attack |
-| **Shiba Insider** | 
+| **Shiba Insider** | Insider Threat |
+
 ---
 
 ### 🛠️ Tooling & Frameworks
