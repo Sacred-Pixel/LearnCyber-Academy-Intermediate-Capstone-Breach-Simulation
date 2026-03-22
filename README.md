@@ -1,5 +1,5 @@
 # LearnCyber-Academy-Intermediate-Capstone-Breach-Simulation
-## Enterprise Breach Simulation: Technical Investigation + GRC Response
+## Enterprise Breach Simulation: Technical Investigation + GRC Frameworks
 
 ### 🛡️ Project Overview
 This project simulates a comprehensive enterprise security incident response. It bridges the gap between deep-dive technical forensics and executive-level risk management. Our team performed hands-on analysis of real-world attack vectors and translated those technical failures into business risk assessments and compliance mapping.
@@ -13,18 +13,19 @@ This simulation was conducted as part of the LearnCyber Academy curriculum. The 
 ---
 
 ### 👥 The Team
-* **[Partner Name A] - Technical Lead**
+* **Harvey R - Technical Lead**
   * Focus: Malware analysis, IOC extraction, attack chain reconstruction, and SOC reporting.
-* **[Partner Name B] - GRC Lead**
+* **Oluwakemi - GRC Lead**
   * Focus: Risk assessment, NIST CSF/ISO 27001 mapping, GDPR compliance, and executive reporting.
 
 ---
 
 ### 🧪 Breach Scenarios Analyzed
-| Lab Scenario | Primary Threat | Key Framework Alignment |
-| :--- | :--- | :--- |
+| Lab Name | Primary Threat | 
+| :--- | :--- | 
 | **Bruteforce** | Identity / Credential Theft | 
-
+| **Phishing 2** | Phishing Attack |
+| **Shiba Insider** | 
 ---
 
 ### 🛠️ Tooling & Frameworks
@@ -36,8 +37,8 @@ This simulation was conducted as part of the LearnCyber Academy curriculum. The 
 
 ### 📂 Repository Structure
 * `/01_Technical_Investigation`: Detailed write-ups, screenshots, and IOCs for each lab.
-* `/02_GRC_Response`: Risk assessment matrices, control mapping, and policy recommendations.
-* `/03_Final_Deliverables`: Final SOC Technical Report and the Executive Risk Report.
+* `/02_GRC_Frameworks`: Risk assessment matrices, control mapping, and policy recommendations.
+* `/03_Executive_Reports`: Final SOC Technical Report and the Executive Risk Report.
 * `/04_Presentation`: Slides for the final project walkthrough.
 
 ---
