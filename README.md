@@ -13,9 +13,9 @@ This simulation was conducted as part of the LearnCyber Academy curriculum. The 
 ---
 
 ### 👥 The Team
-* **Harvey R - Technical Lead**
+* **Person 1- Technical Lead**
   * Focus: Malware analysis, IOC extraction, attack chain reconstruction, and SOC reporting.
-* **Oluwakemi - GRC Lead**
+* **Person 2 - GRC Lead**
   * Focus: Risk assessment, NIST CSF/ISO 27001 mapping, GDPR compliance, and executive reporting.
 
 ---
