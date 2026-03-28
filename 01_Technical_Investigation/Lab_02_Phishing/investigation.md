@@ -1,73 +1,73 @@
 # 🛡️ SOC Technical Investigation: Phishing Analysis 2
-**Lead Investigator:** Harvey R
-**Academy:** LearnCyber Academy - Intermediate Capstone  
+**Lead Investigator:** Harvey R  
+**Academy:** LearnCyber Academy - Intermediate Capstone
 
 ---
 
 ## 1. Executive Attack Summary
-A targeted spear-phishing attack was identified, impersonating Amazon brand communications to harvest user credentials. The email, sent from `amazon@zyevantoby.cn`, utilized urgency-based social engineering ("Your Account has been locked") to pressure the recipient into clicking a malicious link. The attack was sophisticated enough to use Base64 encoding for the body content and leveraged a legitimate Squarespace CDN to host the brand's logo, increasing the appearance of legitimacy.
+On 13 July 2021, a sophisticated spear-phishing campaign was identified targeting the user `saintington73@outlook.com`. The attacker impersonated **Amazon Brand Communications**, using urgency-based social engineering ("Your Account has been locked") to pressure the recipient into clicking a malicious link. The attack utilized **Base64 encoding** for the email body to evade signature-based security filters and leveraged a legitimate Squarespace CDN to host the brand's logo, increasing the appearance of legitimacy. While the email successfully reached the recipient's inbox, no confirmed evidence was found that the user submitted credentials to the landing page.
 
 ---
 
-## 2. Incident Timeline (UTC)
-| Timestamp | Event Description | Source Log / Evidence |
+## 2. Detailed Incident Timeline (UTC)
+The following timeline tracks the email's progression from the attacker's infrastructure through Microsoft’s security layers to the endpoint.
+
+| Time (13 Jul 2021) | Event Description | Technical Evidence |
 | :--- | :--- | :--- |
-| **01:40:32** | **Email Sent:** Malicious email dispatched from attacker domain. | `Date: Wed, 14 Jul 2021` |
-| **N/A** | **Initial Delivery:** Phishing email lands in `saintington73@outlook.com`. | `SMTP Headers / To: Field` |
-| **N/A** | **Triaging:** Forensic analysis of email headers and body initiated. | `Sublime Text / Thunderbird` |
+| **19:14:57** | **Initial Delivery:** Email sent from attacker MTA. | `mta0.zyevantoby.cn` (45.156.23.138) |
+| **19:14:57** | **Security Bypass:** Email passed through MS Protection server. | `BN1NAM02FT027.mail.protection.outlook.com` |
+| **19:14:58** | **Regional Transit:** Email processed by European Exchange server. | `AM7PR06MB6609.eurprd06.prod.outlook.com` |
+| **19:14:58** | **Inbox Delivery:** Email delivered to recipient mailbox. | `AM6PR06MB5954.eurprd06.prod.outlook.com` |
+| **14 Jul 2021** | **Forensic Triage:** Manual analysis of headers and body initiated. | Sublime Text / Thunderbird |
 
 ---
 
-## 3. The Attack Chain Breakdown
+## 3. The Cyber Kill Chain Breakdown
+This model tracks the attacker’s progression from reconnaissance to the potential installation of malicious payloads.
 
-### 🟢 Entry Point
-* **Identification:** External Email originating from an unauthorized domain (`zyevantoby.cn`).
-* **Technical Detail:** The attacker utilized a "Safelinks" protected URL to mask the final destination. The actual malicious endpoint was `amaozn.zzyuchengzhika.cn`.
-* **Visual Evidence:** ![Entry Point Screenshot](./screenshots/phishing_headers.png)
-
-### 🟡 Lateral Movement
-* **Identification:** Credential Harvesting / Account Takeover.
-* **Technical Detail:** The call-to-action button led to a spoofed Amazon login page. A successful click and login would provide the attacker with cleartext credentials, enabling them to bypass authentication and move laterally into any integrated Amazon services (AWS, Business accounts).
-* **Visual Evidence:** ![Lateral Movement Screenshot](./screenshots/malicious_url_decode.png)
-
-### 🔴 Data Exfiltration
-* **Identification:** Tracking and Reconnaissance.
-* **Technical Detail:** The presence of a `mailtoken` in the URL suggests that the attacker was tracking the specific victim. Additionally, a hidden Facebook profile link (`amir.boyka.7`) was found in the footer, likely a remnant of the phishing kit used to build the email.
-* **Visual Evidence:** ![Exfiltration Screenshot](./screenshots/facebook_artifact.png)
+| Stage | Observation | Technical Detail |
+| :--- | :--- | :--- |
+| **1. Reconnaissance** | Targeted Spear-Phishing | Phishing email sent to specific target: `saintington73@outlook.com`. |
+| **2. Weaponisation** | Malicious URL Embedding | A typosquatted URL was embedded in a 'Review Account' button. |
+| **3. Delivery** | O365 Filter Bypass | Use of Safelinks and Base64 encoding allowed the email to reach the inbox. |
+| **4. Exploitation** | Link Redirection | User interaction triggers navigation to the malicious endpoint: `amaozn.zzyuchengzhika.cn`. |
+| **5. Installation** | Credential Harvesting | The landing page was designed to capture cleartext Amazon login details. |
 
 ---
 
 ## 4. Extracted Indicators of Compromise (IOCs)
-*Technical artifacts identified during forensic analysis.*
+These technical artifacts were identified during forensic analysis and added to the enterprise blocklist.
 
-| Type | Value | Description / Context |
+| Type | Value | Significance / Context |
 | :--- | :--- | :--- |
-| **Sender IP/Domain**| `amazon@zyevantoby.cn` | Spoofed sender address |
-| **Malicious URL** | `amaozn.zzyuchengzhika.cn`| Typosquatted phishing landing page |
-| **CDN URL** | `images.squarespace-cdn.com/...`| Used to pull legitimate Amazon logo |
-| **Artifact** | `amir.boyka.7` | Facebook profile found in email code |
+| **Sender Address** | `amazon@zyevantoby.cn` | Spoofed Amazon sender address (Typosquatted domain). |
+| **Source IP** | 45.156.23.138 | Attacker-controlled MTA IP address. |
+| **Malicious URL** | `amaozn.zzyuchengzhika.cn` | Typosquatted landing page designed for credential theft. |
+| **Sender Domain** | `zyevantoby.cn` | Malicious attacker-controlled domain. |
+| **Tracking Token** | `mailtoken=saintington73...` | Used by the attacker to track individual victim interaction. |
+| **Code Artifact** | `amir.boyka.7` | Facebook profile found in the phishing kit footer. |
 
 ---
 
 ## 5. Attack Techniques (MITRE ATT&CK Mapping)
-* **TA0001 - Initial Access:** T1566.002 (Phishing: Spearphishing Link)
-* **TA0007 - Discovery:** T1589.002 (Gather Victim Identity Information: Email Addresses)
-* **TA0005 - Defense Evasion:** T1132.001 (Data Encoding: Standard Encoding - Base64)
+*   **TA0001 - Initial Access:** [T1566.002 - Phishing: Spearphishing Link]
+*   **TA0007 - Discovery:** [T1589.002 - Gather Victim Identity Information: Email Addresses]
+*   **TA0005 - Defense Evasion:** [T1132.001 - Data Encoding: Standard Encoding - Base64]
+*   **TA0001 - Initial Access:** [T1566 - Phishing: Brand Impersonation]
 
 ---
 
 ## 6. Tools Utilized
-* **Forensics:** Sublime Text (Header analysis), Mozilla Thunderbird (Email client)
-* **De-obfuscation:** CyberChef (Base64 decoding of the email body)
-* **Reputation:** URL2PNG (Safe viewing of the landing page)
+The following forensic suite was used to analyze the malicious artifacts.
+
+*   **Email Forensics:** **Mozilla Thunderbird** (Triage) and **Sublime Text** (Header/Path Analysis).
+*   **De-obfuscation:** **CyberChef** (Decoding Base64 body content).
+*   **Reputation Analysis:** **URL2PNG** (Safe rendering of the typosquatted landing page).
 
 ---
 
-## 7. Lab Completion Evidence
-> **Subject:** Your Account has been locked  
-> **Body Encoding:** Base64  
-
-![Lab Completion](./screenshots/lab_finish_phishing.png)
+## 7. Key Findings & Weakness Summary
+*   **Findings:** The attack was highly effective due to its use of **Safelinks-protected URLs** to mask the final malicious destination. The inclusion of legitimate Squarespace CDN assets significantly lowered the "suspicion threshold" for the end-user.
+*   **Key Weakness:** The organization's email perimeter relied on a **single layer of automated link scanning**, which was successfully bypassed. Furthermore, a lack of **User Awareness Training** on typosquatted domains made the recipient vulnerable to urgent social engineering tactics.
 
 ---
-**Note:** *This technical data has been shared with the GRC Lead. High-risk finding: The use of Safelinks indicates the attack successfully traversed standard email filtering.*
